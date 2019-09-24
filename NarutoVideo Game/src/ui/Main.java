@@ -1,186 +1,320 @@
 package ui;
 
+import model.*;
+import model.Character;
+
+import java.io.IOException;
+import java.util.*;
+
+import exeptions.BadChoiseExeption;
+
 public class Main {
+	private Controller co;
+	private Scanner reader;
+
 	public static void main(String[] args) throws Exception {
-		Game game = new Game();
-		game.read();
-		int select = 0;
-		boolean exit = false;
-		Scanner s = new Scanner(System.in);
-		Main m = new Main();
-		m.showMainMenu();
-		
-		do {
-			
-			m.showGameMenu();//shows the menu to do the clans
-			select = s.nextInt();
-			
-			if(select == 0) {
-				System.out.println("Hasta la proxima.");
-				game.write();
-				exit = true;
-				
-			}else if(select == 1) {//administrate clans
-				try {
-					System.out.println("Seleccione el Clan:");
-					int i;
-					for(i = 0; i < game.getClans().size();i++) {
-						System.out.println(i + ") " + game.getClans().get(i).getName());
-					}
-					
-					
-					i = s.nextInt();
-					do {
-						System.out.println("[Clan: " + game.getClans().get(i).getName() + "]");
-						m.showClanMenu();//shows the menu to do characters
-						
-						select = s.nextInt();
-						if(select == 0) {
-							exit = true;
-						} else if(select == 1) {
-							
-							exit = false;
-						} else if(select == 2) {
-							s.nextLine();
-							System.out.println("Ingrese el nombre del presonaje:");
-							String name = s.nextLine();
-							
-							System.out.println("Ingrese la personalidad del personaje:");
-							String per = s.nextLine();
-							
-							System.out.println("Ingrese la fecha de creacion del personaje:");
-							String date = s.nextLine();
-							
-							System.out.println("Ingrese el poder del personaje:");
-							double power = s.nextDouble();
-							
-							Character ch = new Character(name, per, date, power);
-							game.getClans().get(i).addCh(ch);
-							
-						} else if(select == 3) {
-							
-							System.out.println("Ingrese el nombre del Personaje a Actualizar ");
-							s.nextInt();
-							String n = s.nextLine();
-							Character aux = game.getClans().get(i).searchByName(n);
-							
-							System.out.println("Ingrese el nuevo nombre del Personaje:");
-							String name = s.nextLine();
-							aux.setName(name);
-							
-							System.out.println("Ingrese la nueva personalidad del Personaje:");
-							String per = s.nextLine();
-							aux.setPersonality(per);
-							
-							System.out.println("Ingrese la nueva fecha de creacion del Personaje");
-							String date = s.nextLine();
-							aux.setCreationDate(date);
-							
-							System.out.println("Ingrese el nuevo poder del Personaje");
-							double pow = s.nextDouble();
-							aux.setPower(pow);
-														
-						} else if(select == 4) {
-							
-							
-						} else {
-							System.out.println("ERROR: Entrada no valida.");
-						}
-					}while(!exit);
-					
-				}catch (NullPointerException e) {
-					System.out.println("ERROR: No existe ningun clan");
-				}catch (IndexOutOfBoundsException e) {
-					System.out.println("ERROR: No existe el clan ingresado");
+		Main execute = new Main();
+		execute.menu();
+	}
+
+	public Main() {
+		reader = new Scanner(System.in);
+	}
+
+	public void menu() throws Exception {
+		int userInput = 0;
+
+		co = new Controller();
+		co.read();
+		co.ordeninAll();
+		System.out.println("");
+		System.out.println("");
+
+		// WELCOME
+		System.out.println("-----------------------------------------------------------------");
+		System.out.println("Welcome to the best lab in the world");
+		System.out.println("enjoy your stay :3");
+		System.out.println("-----------------------------------------------------------------");
+		while (userInput != 4) {
+
+			showControllerOp();
+
+			System.out.println("------------------------------------------");
+			System.out.print("| Type the number of your selection: ");
+			try {
+				userInput = reader.nextInt();
+				reader.nextLine();
+				System.out.println("--------------------------------------");
+
+				switch (userInput) {
+
+				case 1:
+					accessClan();
+					break;
+
+				case 2:
+					registerClan();
+					break;
+
+				case 3:
+					updateClan();
+					break;
+
+				case 4:
+					deleteClan();
+					break;
+
+				case 5:
+					theGoodbye();
+					co.write();
+					break;
+
+				default:
+					System.out.println();
+					System.out.println("Please type a number between 1 and 5");
+					System.out.println();
+					break;
+
 				}
-				exit = false;
-			}else if (select == 2) {//register clans
-				try {
-					System.out.println("Ingrese el nombre del Clan:");
-					s.nextLine();
-					String name = s.nextLine();
-				
-					Clan clan = new Clan(name);
-					game.addClan(clan);
-					
-				}catch (NullPointerException e) {
-					System.out.println("ERROR: Entrada no valida.");
-				}
-			}else if (select == 3) {//update clan
-				System.out.println("Seleccione el clan que desea actualizar:");
-				int i;
-				for(i = 0; i < game.getClans().size();i++) {
-					System.out.println(i + ") " + game.getClans().get(i).getName());
-				}
-				
-				
-				i = s.nextInt();
-				
-				System.out.println("Ingrese el nuevo nombre del clan:");
-				s.nextLine();
-				game.getClans().get(i).setName(s.nextLine());
-			}else if (select == 4) {//delete clan
-				try {
-					s.nextLine();
-					System.out.println("Ingrese el nombre del clan que desea eliminar");
-					String toFind = s.nextLine();
-					
-					game.deleteClan(game.findByName(toFind));
-					System.out.println("Se ha eliminado exitosamente.");
-				}catch(NullPointerException e) {
-					System.out.println("ERROR: No existe el clan ingresado");
-				}
-			}else {
-				System.out.println("ERROR: Entrada no valida, intente de nuevo.");
+			} catch (InputMismatchException e) {
+				System.out.println();
+				System.out.print("ERROR: Invalid option");
+				reader.nextLine();
+				System.out.println();
 			}
-		} while(!exit);
-		
-		
+
+		}
+
 	}
-	
-	public void showMainMenu() {
-		System.out.println("#########################################################");
-		System.out.println("################# B I E N V E N I D O ###################");
-		System.out.println("############# HECHO POR: SAMUEL SATIZABAL ###############");
-		System.out.println("#################### CHOZO COMPANY ######################");
-		System.out.println("#########################################################\n");
-		
-		
+
+	public void showControllerOp() {
+
+		System.out.println("--------------------------------------- \n");
+		System.out.println("1. access a clan.");
+		System.out.println("2. Register a new clan.");
+		System.out.println("3. update clan.");
+		System.out.println("4. Delete a clan.");
+		System.out.println("5. CHAU ");
+		System.out.println("----------------------------------------- \n");
 	}
-	
-	public void showGameMenu() {
-		System.out.println(" _______________________________________________");
-		System.out.println("|              Que desea hacer?:                |");
-		System.out.println("|_______________________________________________|");
-		System.out.println("|1.Administrar Clanes                           |");
-		System.out.println("|2.Aniadir Clan                                 |");
-		System.out.println("|3.Actualizar Clan                              |");
-		System.out.println("|4.Eliminar Clan                                |");
-		System.out.println("|0.Salir                                        |");
-		System.out.println("|_______________________________________________|");
-	}
-	
+
 	public void showClanMenu() {
-		System.out.println(" _______________________________________________");
-		System.out.println("|              Que desea hacer?:                |");
-		System.out.println("|_______________________________________________|");
-		System.out.println("|1.Administrar Personajes                       |");
-		System.out.println("|2.Aniadir Personaje                            |");
-		System.out.println("|3.Actualizar Personaje                         |");
-		System.out.println("|4.Eliminar Personaje                           |");
-		System.out.println("|0.Regresar                                     |");
-		System.out.println("|_______________________________________________|");
+		System.out.println("--------------------------------------- \n");
+		System.out.println("1. access a character.");
+		System.out.println("2. Register a new Character.");
+		System.out.println("3. update character.");
+		System.out.println("4. Delete a character.");
+		System.out.println("----------------------------------------- \n");
 	}
-	
+
 	public void showCharacterMenu() {
-		System.out.println(" _______________________________________________");
-		System.out.println("|              Que desea hacer?:                |");
-		System.out.println("|_______________________________________________|");
-		System.out.println("|1.Administrar Tecnicas                         |");
-		System.out.println("|2.Aniadir Tecnica                              |");
-		System.out.println("|3.Actualizar Tecnica                           |");
-		System.out.println("|4.Eliminar Tecnica                             |");
-		System.out.println("|0.Regresar                                     |");
-		System.out.println("|_______________________________________________|");
+		System.out.println("--------------------------------------- \n");
+		System.out.println("1. show a Techniques.");
+		System.out.println("2. Register a new technique.");
+		System.out.println("3. update technique.");
+		System.out.println("4. Delate a technique.");
+		System.out.println("----------------------------------------- \n");
+	}
+
+	public void theGoodbye() {
+		System.out.print("see you later");
+		System.out.flush();
+		System.out.println("");
+		System.out.println("");
+	}
+
+	public void accessClan() {
+		boolean ce = false;
+		String name = null;
+		String namec;
+		String nameT;
+		int mo = 0;
+		while (!ce && mo != 2) {
+			System.out.println("Enter clan name");
+			name = reader.nextLine();
+			System.out.println(co.findClan(name));
+			if (!co.findClan(name).equalsIgnoreCase("clan was not found")) {
+				ce = true;
+			} else {
+				mo++;
+			}
+		}
+		if (mo != 2) {
+			if (!co.findClan(name).equalsIgnoreCase("clan was not found")) {
+				showClanMenu();
+				System.out.println("Type the number of your selection:");
+				int sel1 = 0;
+				ce = false;
+				while (!ce) {
+					try {
+						sel1 = reader.nextInt();
+						reader.nextLine();
+						if (sel1 > 4 || sel1 < 1) {
+							throw new BadChoiseExeption("bad choise");
+						} else {
+							ce = true;
+						}
+					} catch (Exception e) {
+						System.out.println("please choose a valid option");
+					}
+
+				}
+				if (sel1 == 1) {
+					System.out.println("Enter the name of Character");
+					namec = reader.nextLine();
+					System.out.println(co.findCharacter(name, namec));
+					showCharacterMenu();
+					ce = false;
+					while (!ce) {
+						try {
+							sel1 = reader.nextInt();
+							reader.nextLine();
+							if (sel1 > 4 || sel1 < 1) {
+								throw new BadChoiseExeption("bad choise");
+							} else {
+								ce = true;
+							}
+						} catch (Exception e) {
+							System.out.println("please choose a valid option");
+						}
+					}
+					System.out.println("Enter the name of technique");
+					nameT = reader.nextLine();
+					if (sel1 == 1) {
+
+						System.out.println(co.findTechnique(name, namec, nameT));
+					}
+					if (sel1 == 2) {
+
+						System.out.println("Enter the factor");
+						System.out.println("twice to confirm");
+						ce = false;
+						double fac = 0.0;
+						reader.nextLine();
+						while (!ce) {
+							try {
+								fac = reader.nextDouble();
+							} catch (Exception e) {
+								System.out.println("please choose a valid option");
+							}
+							ce = true;
+
+						}
+						Technique t1 = new Technique(nameT, fac);
+						co.addTechnique(name, namec, t1);
+					}
+					if (sel1 == 3) {
+						System.out.println("Enter update the factor");
+						co.deleteTechnique(name, namec, nameT);
+						double fac = 0.0;
+						while (!ce) {
+							try {
+								fac = reader.nextDouble();
+								reader.nextLine();
+								ce = true;
+							} catch (Exception e) {
+								System.out.println("please choose a valid option");
+							}
+
+						}
+						Technique t1 = new Technique(nameT, fac);
+						co.addTechnique(name, namec, t1);
+					}
+					if (sel1 == 4) {
+						co.deleteTechnique(name, namec, nameT);
+					}
+				} else if (sel1 == 2) {
+					System.out.println("Enter the name of Character");
+					namec = reader.nextLine();
+					System.out.println("Enter the power of character");
+					double fac = 0.0;
+					ce = false;
+					while (!ce) {
+						try {
+							fac = reader.nextDouble();
+							reader.nextLine();
+							ce = true;
+						} catch (Exception e) {
+							System.out.println("please choose a valid option");
+						}
+
+					}
+					System.out.println("Enter date of character");
+					String date = reader.nextLine();
+					Character c1 = new Character(fac, namec, date);
+					co.addCharacter(name, c1);
+				} else if (sel1 == 3) {
+					System.out.println("Enter the name of Character");
+					namec = reader.nextLine();
+					System.out.println("Enter the power of character");
+					double fac = 0.0;
+					while (!ce) {
+						try {
+							fac = reader.nextDouble();
+							reader.nextLine();
+							ce = true;
+						} catch (Exception e) {
+							System.out.println("please choose a valid option");
+						}
+
+					}
+					System.out.println("Enter date of character");
+					String date = reader.nextLine();
+					co.updateCharacter(name, namec, fac, date);
+				} else if (sel1 == 4) {
+					System.out.println("Enter the name of Character");
+					namec = reader.nextLine();
+					co.deleteCharacter(name, namec);
+				}
+			}
+		}
+	}
+
+	public void registerClan() {
+
+		boolean ce = false;
+		int i = 0;
+		while (!ce && i != 2) {
+			System.out.println("Enter the name of clan");
+			String name = reader.nextLine();
+			if (co.findClan(name).equalsIgnoreCase("clan was not found")) {
+
+				co.addClanS(name);
+				ce = true;
+			} else {
+				System.out.println("the clan already exists");
+				i++;
+			}
+		}
+	}
+
+	public void updateClan() {
+		boolean ce = false;
+		int i = 0;
+		while (!ce && i != 2) {
+			System.out.println("Enter the name of clan");
+			String name = reader.nextLine();
+			i++;
+			if (!co.findClan(name).equalsIgnoreCase("clan was not found")) {
+				System.out.println("Enter a new name of clan");
+				String name1 = reader.nextLine();
+				co.updateClan(name, name1);
+				ce = true;
+			} else {
+				System.out.println("the clan was not found");
+
+			}
+		}
+	}
+
+	public void deleteClan() {
+		System.out.println("Enter the name of clan");
+		String name = reader.nextLine();
+
+		if (!co.findClan(name).equalsIgnoreCase("clan was not found")) {
+			co.deleteClan(name);
+		} else {
+			System.out.println("clan was not found");
+		}
 	}
 }

@@ -18,10 +18,7 @@ public class Controller {
 		return clans;
 	}
 
-	public void setFristClan(ArrayList<Clan> clans) {
-		this.clans = clans;
-	}
-
+	
 	public void read() throws Exception {
 
 		File archive = new File("./reader/reader.game");
@@ -85,7 +82,7 @@ public class Controller {
 		String ms = "";
 		for (int i = 0; i < clans.size(); i++) {
 			if (clans.get(i).getName().equalsIgnoreCase(name)) {
-				ms = clans.get(i).toString();
+				ms += clans.get(i).toString();
 				i = clans.size();
 			}
 		}
@@ -95,8 +92,9 @@ public class Controller {
 		return ms;
 	}
 
-	public void addClanS(Clan c) {
-		if (findClan(c.getName()).equals("clan was not found")) {
+	public void addClanS(String name) {
+		if (findClan(name).equals("clan was not found")) {
+			Clan c = new Clan(name);
 			clans.add(c);
 			ordeningClub();
 		}
@@ -128,7 +126,7 @@ public class Controller {
 		String ms = "";
 		for (int i = 0; i < clans.size(); i++) {
 			if (clans.get(i).getName().equalsIgnoreCase(ncl)) {
-				clans.get(i).findTechnique(naC, nameT);
+				ms += clans.get(i).findTechnique(naC, nameT);
 			}
 		}
 		if (ms.equals("")) {
@@ -178,6 +176,24 @@ public class Controller {
 		for (int i = 0; i < clans.size(); i++) {
 			if (clans.get(i).getName().equalsIgnoreCase(nacl)) {
 				clans.get(i).addCharacter(t1);
+			}
+		}
+	}
+	
+	public void updateClan(String name, String name1) {
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).getName().equalsIgnoreCase(name)) {
+				clans.get(i).setName(name1);
+				i = clans.size();
+			}
+		}
+	}
+	
+	public void updateCharacter(String nameC, String name, double power, String date) {
+		for (int i = 0; i < clans.size(); i++) {
+			if (clans.get(i).getName().equalsIgnoreCase(nameC)) {
+				clans.get(i).updatecharacter(name, power, date);;
+				i = clans.size();
 			}
 		}
 	}

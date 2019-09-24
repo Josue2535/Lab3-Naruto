@@ -141,17 +141,17 @@ public class Character implements Serializable, Comparable<Character> {
 	}
 
 	// find technique
-	public String findTechnique(String name) {
+	public String findTechnique(String name1) {
 		String ms = "";
 		if (frisTechnique != null) {
-			if (frisTechnique.getName().equalsIgnoreCase(name)) {
-				ms = frisTechnique.toString();
+			if (frisTechnique.getName().equalsIgnoreCase(name1)) {
+				ms += frisTechnique.toString();
 			} else {
 				Technique t1 = frisTechnique.getNext();
 				boolean ce = false;
 				while (t1 != null && !ce) {
-					if (t1.getName().equalsIgnoreCase(name)) {
-						ms = t1.toString();
+					if (t1.getName().equalsIgnoreCase(name1)) {
+						ms += t1.toString();
 						ce = true;
 					}
 					t1 = t1.getNext();
@@ -169,24 +169,23 @@ public class Character implements Serializable, Comparable<Character> {
 		next = next.getNext();
 	}
 
-	public void delateTechnique(String name) {
+	public void delateTechnique(String name1) {
 		if (frisTechnique != null) {
+
 			Technique t1 = frisTechnique;
 			Technique t2 = t1.getNext();
-			if (t1.equals(name)) {
-				frisTechnique = t2;
+			if (t1.getName().equalsIgnoreCase(name1)) {
+				t1 = t2;
 			} else {
 				boolean ce = false;
 				while (!ce && t2 != null) {
-					if (t2.getName().equalsIgnoreCase(name) && t2.getNext() != null) {
-						t2.getNext().setBefore(t1);
+					if (t2.getName().equalsIgnoreCase(name1)) {
 						t1.setNext(t2.getNext());
+						if (t2.getNext() != null)
+							t2.getNext().setBefore(t1);
+
 						ce = true;
 
-					}
-					if (t2.getName().equalsIgnoreCase(name) && t2.getNext() == null) {
-						t1.setNext(t2.getNext());
-						ce = true;
 					}
 					t1 = t1.getNext();
 					t2 = t1.getNext();

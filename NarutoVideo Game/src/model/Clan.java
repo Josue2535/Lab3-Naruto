@@ -121,7 +121,7 @@ public class Clan implements Serializable, Comparator<Clan> {
 
 	@Override
 	public String toString() {
-		return "Clan [name=" + name + ", frist=" + frist.getName() + "]";
+		return "Clan [name=" + name + "]";
 	}
 
 	public String findCharacter(String name) {
@@ -171,7 +171,7 @@ public class Clan implements Serializable, Comparator<Clan> {
 		Character t1 = frist;
 		boolean ce = false;
 		while (t1 != null && !ce) {
-			if (t1.getName().equalsIgnoreCase(name)) {
+			if (t1.getName().equalsIgnoreCase(nameC)) {
 				t1.addTechnique(t);
 				ce = true;
 			}
@@ -190,5 +190,19 @@ public class Clan implements Serializable, Comparator<Clan> {
 			i = 1;
 		}
 		return i;
+	}
+	
+	public void updatecharacter(String name, double power, String date) {
+		Character t1 = frist;
+		boolean ce = false;
+		while (t1 != null && !ce) {
+			if (t1.getName().equalsIgnoreCase(name)) {
+				t1.setPower(power);
+				t1.setDate(date);
+				ce = true;
+			}
+			t1 = t1.getNext();
+
+		}
 	}
 }
