@@ -54,7 +54,7 @@ public class Controller {
 		}
 	}
 
-	public void ordeningClub() {
+	public void ordeningClan() {
 		int inicial;
 		for (inicial = 0; inicial < clans.size(); inicial++) {
 			int minorPosition = inicial;
@@ -96,12 +96,12 @@ public class Controller {
 		if (findClan(name).equals("clan was not found")) {
 			Clan c = new Clan(name);
 			clans.add(c);
-			ordeningClub();
+			ordeningClan();
 		}
 	}
 
 	public void ordeninAll() {
-		ordeningClub();
+		ordeningClan();
 		for (int i = 0; i < clans.size(); i++) {
 			clans.get(i).ordeningAll();
 

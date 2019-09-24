@@ -87,7 +87,7 @@ public class Character implements Serializable, Comparable<Character> {
 	public void ordeningFactor() {
 
 		boolean ce2 = false;
-		for (int i = sizeTechnique() + 1; i > 0 && !ce2; i--) {
+		for (int i = sizeTechnique(); i > 0 && !ce2; i--) {
 			if (frisTechnique != null) {
 				Technique t1 = frisTechnique;
 				Technique t2 = frisTechnique.getNext();
@@ -96,7 +96,7 @@ public class Character implements Serializable, Comparable<Character> {
 				} else {
 					if (t1.compareTo(t2) > 0) {
 						t1.insertarAntes(t2);
-						t2.insertarDespues(t1);
+						frisTechnique = t2;
 					}
 					t1 = t1.getNext();
 					t2 = t1.getNext();
@@ -104,7 +104,6 @@ public class Character implements Serializable, Comparable<Character> {
 
 						if (t1.compareTo(t2) > 0) {
 							t1.insertarAntes(t2);
-							t2.insertarDespues(t1);
 						}
 						t1 = t1.getNext();
 						t2 = t1.getNext();
@@ -134,7 +133,7 @@ public class Character implements Serializable, Comparable<Character> {
 			frisTechnique = t1;
 		} else {
 			if (findTechnique(t1.getName()).equalsIgnoreCase("the technique was not found")) {
-				frisTechnique.insertarAntes(t1);
+				frisTechnique.insertarDespues(t1);
 				ordeningFactor();
 			}
 		}
@@ -175,8 +174,12 @@ public class Character implements Serializable, Comparable<Character> {
 			Technique t1 = frisTechnique;
 			Technique t2 = t1.getNext();
 			if (t1.getName().equalsIgnoreCase(name1)) {
-				t1 = t2;
-			} else {
+				frisTechnique = t2;
+			} 
+			else if(t1.getName().equalsIgnoreCase(name1) && t2 == null) {
+				frisTechnique = null;
+			}
+			else {
 				boolean ce = false;
 				while (!ce && t2 != null) {
 					if (t2.getName().equalsIgnoreCase(name1)) {

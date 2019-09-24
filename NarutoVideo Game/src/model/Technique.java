@@ -47,7 +47,7 @@ public class Technique implements Serializable, Comparable<Technique> {
 	public void setBefore(Technique before) {
 		this.before = before;
 	}
-	
+
 	public void insertarDespues(Technique t1) {
 		t1.next = next;
 		if (next != null)
@@ -58,20 +58,25 @@ public class Technique implements Serializable, Comparable<Technique> {
 	}
 
 	public void insertarAntes(Technique t1) {
-		if (before != null)
+		if (before != null) {
 			before.next = t1;
-		t1.before = before;
-		t1.next = this;
-		before = t1;
+			t1.before = before;
+			t1.next = this;
+			before = t1;
+			if(t1.getNext()!= null) {
+				next = t1.getNext();
+				t1.getNext().setBefore(this);
+			}
+		}
 	}
 
 	@Override
 	public int compareTo(Technique t1) {
 		int i = 0;
-		if(factor<t1.getFactor()) {
-			i=-1;
+		if (factor < t1.getFactor()) {
+			i = -1;
 		}
-		if(factor>t1.getFactor()) {
+		if (factor > t1.getFactor()) {
 			i = 1;
 		}
 		return i;
@@ -79,7 +84,8 @@ public class Technique implements Serializable, Comparable<Technique> {
 
 	@Override
 	public String toString() {
-		return "Technique [name=" + name + ", factor=" + factor + ", next=" + next + ", before=" + before + "]";
+		return "Technique [name=" + name + ", factor=" + factor + "]";
+
 	}
-	
+
 }

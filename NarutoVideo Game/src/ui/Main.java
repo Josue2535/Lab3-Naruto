@@ -12,13 +12,13 @@ public class Main {
 	private Controller co;
 	private Scanner reader;
 
+	public Main() {
+		reader = new Scanner(System.in);
+	}
+
 	public static void main(String[] args) throws Exception {
 		Main execute = new Main();
 		execute.menu();
-	}
-
-	public Main() {
-		reader = new Scanner(System.in);
 	}
 
 	public void menu() throws Exception {
@@ -35,7 +35,7 @@ public class Main {
 		System.out.println("Welcome to the best lab in the world");
 		System.out.println("enjoy your stay :3");
 		System.out.println("-----------------------------------------------------------------");
-		while (userInput != 4) {
+		while (userInput != 5) {
 
 			showControllerOp();
 
