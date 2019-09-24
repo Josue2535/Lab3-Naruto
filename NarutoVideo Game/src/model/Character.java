@@ -85,7 +85,7 @@ public class Character implements Serializable, Comparable<Character> {
 
 	// ordenar technique por factor
 	public void ordeningFactor() {
-		
+
 		boolean ce2 = false;
 		for (int i = sizeTechnique() + 1; i > 0 && !ce2; i--) {
 			if (frisTechnique != null) {
@@ -100,8 +100,8 @@ public class Character implements Serializable, Comparable<Character> {
 					}
 					t1 = t1.getNext();
 					t2 = t1.getNext();
-					for (int j = 0; j < i  && t2 != null; j++) {
-						
+					for (int j = 0; j < i && t2 != null; j++) {
+
 						if (t1.compareTo(t2) > 0) {
 							t1.insertarAntes(t2);
 							t2.insertarDespues(t1);
@@ -133,8 +133,10 @@ public class Character implements Serializable, Comparable<Character> {
 		if (frisTechnique == null) {
 			frisTechnique = t1;
 		} else {
-			frisTechnique.insertarAntes(t1);
-			ordeningFactor();
+			if (findTechnique(t1.getName()).equalsIgnoreCase("the technique was not found")) {
+				frisTechnique.insertarAntes(t1);
+				ordeningFactor();
+			}
 		}
 	}
 

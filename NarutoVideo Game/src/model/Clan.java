@@ -1,8 +1,9 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class Clan implements Serializable, Comparable<Clan> {
+public class Clan implements Serializable, Comparator<Clan> {
 	private String name;
 	private Character frist;
 
@@ -74,7 +75,7 @@ public class Clan implements Serializable, Comparable<Clan> {
 			if (frist.getNext() == null) {
 
 			} else {
-				
+
 				Character f = null;
 				Character o = null;
 				Character m = frist;
@@ -101,8 +102,8 @@ public class Clan implements Serializable, Comparable<Clan> {
 						}
 					}
 				}
-			
-			frist = o;
+
+				frist = o;
 			}
 		}
 	}
@@ -111,9 +112,16 @@ public class Clan implements Serializable, Comparable<Clan> {
 		if (frist == null) {
 			frist = c1;
 		} else {
-			frist.addNext(c1);
-			ordeningCharacter();
+			if ((findCharacter(c1.getName()).equalsIgnoreCase("the character was not found"))) {
+				frist.addNext(c1);
+				ordeningCharacter();
+			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Clan [name=" + name + ", frist=" + frist.getName() + "]";
 	}
 
 	public String findCharacter(String name) {
@@ -149,9 +157,32 @@ public class Clan implements Serializable, Comparable<Clan> {
 		return ms;
 	}
 
+	
+	public void ordeningAll() {
+		ordeningCharacter();
+		Character t1 = frist;
+		while (t1 != null) {
+			t1.ordeningFactor();
+			t1 = t1.getNext();
+		}
+	}
+	
+	public void addTechnique(String nameC, Technique t) {
+		Character t1 = frist;
+		boolean ce = false;
+		while (t1 != null && !ce) {
+			if (t1.getName().equalsIgnoreCase(name)) {
+				t1.addTechnique(t);
+				ce = true;
+			}
+			t1 = t1.getNext();
+
+		}
+	}
+
 	@Override
-	public int compareTo(Clan o) {
-		int i = name.compareToIgnoreCase(o.getName());
+	public int compare(Clan o1, Clan o2) {
+		int i = o1.getName().compareToIgnoreCase(o2.getName());
 		if (i < 0) {
 			i = -1;
 		}
@@ -160,5 +191,4 @@ public class Clan implements Serializable, Comparable<Clan> {
 		}
 		return i;
 	}
-
 }
